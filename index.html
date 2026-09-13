@@ -153,7 +153,7 @@ a{color:#c9a86a}
     <button class="hb" id="bright">▶</button>
   </div>
 </div>
-<div id="help">◀ ▶ choose · ● confirm · drag Lucky to pet — he lives on while you're away</div><div id="ver">v27</div><div id="sib"><a href="https://jacobegarcia.github.io/lucky-garden/">庭 garden</a> <span style="opacity:.35">·</span> <a href="https://jacobegarcia.github.io/lucky-cat-tamagotchi/">卵 tama</a></div>
+<div id="help">◀ ▶ choose · ● confirm · drag Lucky to pet — he lives on while you're away</div><div id="ver">v28</div><div id="sib"><a href="https://jacobegarcia.github.io/lucky-garden/">庭 garden</a> <span style="opacity:.35">·</span> <a href="https://jacobegarcia.github.io/lucky-cat-tamagotchi/">卵 tama</a></div>
 </div>
 <div id="fortune"><div class="card"><div class="seal">吉</div><div class="stick"></div><h2 id="fttl"></h2><div class="jp" id="fjp"></div><p id="ftxt"></p><button id="fok">POCKET IT</button></div></div>
 <div id="share"><div class="card"><div class="seal">札</div><h2>LUCKY CARD</h2><div class="jp">絵馬札</div><canvas id="cardCv" width="900" height="1200"></canvas><input id="cname" maxlength="12" placeholder="your cat's name"><div><button id="cdl">DOWNLOAD</button> <button id="cok">DONE</button></div></div></div>
@@ -199,6 +199,14 @@ const cushion=new THREE.Mesh(new THREE.CylinderGeometry(2.1,2.3,.55,28),cushionM
 cushion.position.y=.28;scene.add(cushion);
 const trim=new THREE.Mesh(new THREE.TorusGeometry(2.12,.07,10,40),new THREE.MeshStandardMaterial({color:0xd8b860,roughness:.3,metalness:.7}));
 trim.rotation.x=Math.PI/2;trim.position.y=.56;scene.add(trim);
+// koban jar: the shared wallet, resting in the tokonoma corner
+const jarG=new THREE.Group();jarG.position.set(-2.4,0,-2.1);scene.add(jarG);
+const jar=new THREE.Mesh(new THREE.CylinderGeometry(.3,.38,.5,20),new THREE.MeshStandardMaterial({color:0x2e4a5e,roughness:.4}));jar.position.y=.25;jarG.add(jar);
+const jarRim=new THREE.Mesh(new THREE.TorusGeometry(.3,.035,10,24),new THREE.MeshStandardMaterial({color:0x1e3644,roughness:.45}));jarRim.rotation.x=Math.PI/2;jarRim.position.y=.5;jarG.add(jarRim);
+const jarCoins=[];
+for(let i=0;i<3;i++){const cn=new THREE.Mesh(new THREE.CylinderGeometry(.24,.24,.06,20),new THREE.MeshStandardMaterial({color:0xe8a92c,roughness:.3,metalness:.5,emissive:0x8a6a10,emissiveIntensity:.15}));cn.position.set(i%2?.04:-.04,.53+i*.055,i%2?-.03:.03);cn.rotation.y=i*.7;jarG.add(cn);jarCoins.push(cn);}
+let _jarTier=-1;
+function updateJar(){const q=new URLSearchParams(location.search);const v=q.has('coins')?+q.get('coins'):S.coins|0;const t=v>=150?3:v>=50?2:v>=1?1:0;if(t===_jarTier)return;_jarTier=t;jarCoins.forEach((c,i)=>c.visible=i<t);}
 
 // ---------------- room: shoji, kakemono, seasonal drift (JP design direction) ----------------
 const shojiTex=(()=>{const c=document.createElement('canvas');c.width=512;c.height=384;const g=c.getContext('2d');
@@ -1013,7 +1021,7 @@ function burst(sym,n){
   }
 }
 function flashStatus(t){statusFlash=t;statusFlashT=2.5;}
-function drawStats(){
+function drawStats(){updateJar();
   const b=v=>{const p=Math.round(clamp(v));return '<span class="bar"><i class="'+(p<25?'crit':'')+'" style="width:'+p+'%"></i></span>';};
   const streakRow=S.streak>=2?('DAY '+S.streak+' \u{1F525}<br>'):'';
   document.getElementById('stats').innerHTML=streakRow+
