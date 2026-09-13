@@ -73,7 +73,16 @@ body::before{content:'';position:fixed;top:8vh;right:6vw;width:min(46vh,340px);h
 #fortune button{font-family:'Press Start 2P',monospace;font-size:10px;padding:10px 18px;border:0;background:#a01828;color:#ffe9b8;cursor:pointer;border-radius:6px;margin-top:8px}
 #help{text-align:center;color:#8a7f92;font-size:clamp(9px,2.6vw,11px);margin-top:14px;padding:0 6px}
 a{color:#c9a86a}
-#ver{position:fixed;right:8px;bottom:6px;font:8px monospace;color:#ffffff30;z-index:60;pointer-events:none;letter-spacing:.12em}</style></head><body>
+#ver{position:fixed;right:8px;bottom:6px;font:8px monospace;color:#ffffff30;z-index:60;pointer-events:none;letter-spacing:.12em}#veil{position:fixed;inset:0;background:#f5efe3;z-index:999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;transition:opacity .7s ease}
+#veil.hide{opacity:0;pointer-events:none}
+#veil .vj{font-family:'Zen Maru Gothic',sans-serif;font-weight:700;font-size:54px;color:#a01828;letter-spacing:.1em}
+#veil .ve{font-family:'Press Start 2P',monospace;font-size:10px;color:#3a2a1a;letter-spacing:.34em}
+#veil .vd{display:flex;gap:9px;margin-top:8px}
+#veil .vd i{width:9px;height:9px;border-radius:50%;background:#c9a227;animation:vp 1s infinite ease-in-out}
+#veil .vd i:nth-child(2){animation-delay:.15s}#veil .vd i:nth-child(3){animation-delay:.3s}
+@keyframes vp{0%,100%{transform:translateY(0);opacity:.45}50%{transform:translateY(-7px);opacity:1}}
+</style></head><body>
+<div id="veil"><div class="vj">招き猫</div><div class="ve">LUCKY</div><div class="vd"><i></i><i></i><i></i></div></div>
 <div>
 <div id="device">
   <div id="brand"><svg xmlns="http://www.w3.org/2000/svg" viewBox="80 30 340 245" width="30" height="30" style="vertical-align:-7px;margin-right:4px">
@@ -132,7 +141,7 @@ a{color:#c9a86a}
     <button class="hb" id="bright">▶</button>
   </div>
 </div>
-<div id="help">◀ ▶ choose · ● confirm · drag Lucky to pet — he lives on while you're away</div><div id="ver">v21</div>
+<div id="help">◀ ▶ choose · ● confirm · drag Lucky to pet — he lives on while you're away</div><div id="ver">v22</div>
 </div>
 <div id="fortune"><div class="card"><div class="seal">吉</div><div class="stick"></div><h2 id="fttl"></h2><div class="jp" id="fjp"></div><p id="ftxt"></p><button id="fok">POCKET IT</button></div></div>
 <div id="share"><div class="card"><div class="seal">札</div><h2>LUCKY CARD</h2><div class="jp">絵馬札</div><canvas id="cardCv" width="900" height="1200"></canvas><input id="cname" maxlength="12" placeholder="your cat's name"><div><button id="cdl">DOWNLOAD</button> <button id="cok">DONE</button></div></div></div>
@@ -1119,6 +1128,9 @@ if(_shot==='face'){cam.position.set(0,2.7,4.6);cam.lookAt(0,2.5,0);}
 else if(_shot==='room'){cam.position.set(0,2.5,8.6);cam.lookAt(0,1.5,0);}
 else if(_shot==='full'){cam.position.set(0,1.9,6.2);cam.lookAt(0,1.3,0);}
 rend.setAnimationLoop(animate);
+// veil: dismiss after the scene has painted a few frames; hard safety net at 20s
+let _veilN=0;(function _veilTick(){const v=document.getElementById('veil');if(!v)return;if(++_veilN>3){v.classList.add('hide');setTimeout(()=>v.remove(),900);}else requestAnimationFrame(_veilTick);})();
+setTimeout(()=>{const v=document.getElementById('veil');if(v){v.classList.add('hide');setTimeout(()=>v.remove(),900);}},20000);
 </script>
 </body>
 </html>
