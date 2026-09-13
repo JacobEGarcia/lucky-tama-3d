@@ -132,7 +132,7 @@ a{color:#c9a86a}
     <button class="hb" id="bright">▶</button>
   </div>
 </div>
-<div id="help">◀ ▶ choose · ● confirm · drag Lucky to pet — he lives on while you're away</div><div id="ver">v17</div>
+<div id="help">◀ ▶ choose · ● confirm · drag Lucky to pet — he lives on while you're away</div><div id="ver">v18</div>
 </div>
 <div id="fortune"><div class="card"><div class="seal">吉</div><div class="stick"></div><h2 id="fttl"></h2><div class="jp" id="fjp"></div><p id="ftxt"></p><button id="fok">POCKET IT</button></div></div>
 <div id="share"><div class="card"><div class="seal">札</div><h2>LUCKY CARD</h2><div class="jp">絵馬札</div><canvas id="cardCv" width="900" height="1200"></canvas><input id="cname" maxlength="12" placeholder="your cat's name"><div><button id="cdl">DOWNLOAD</button> <button id="cok">DONE</button></div></div></div>
@@ -204,6 +204,7 @@ const scrollTex=(()=>{const c=document.createElement('canvas');c.width=256;c.hei
 const scroll=new THREE.Mesh(new THREE.PlaneGeometry(.72,2.3),new THREE.MeshStandardMaterial({map:scrollTex,roughness:.85}));
 scroll.position.set(-2.5,2.5,-2.7);scroll.rotation.y=.18;scene.add(scroll);
 // omamori charm - a small wish hanging by the scroll
+const gold=new THREE.MeshStandardMaterial({color:0xd8b860,roughness:.25,metalness:.85});
 const omamoriTex=(jp)=>{const c=document.createElement('canvas');c.width=64;c.height=96;const g=c.getContext('2d');
   g.fillStyle='#f5f1e8';g.fillRect(0,0,64,96);
   g.fillStyle='#16130e';g.font='700 44px "Noto Serif JP",serif';g.textAlign='center';g.fillText(jp,32,62);
@@ -283,7 +284,7 @@ function checkDaruma(){
 
 // ---------------- the cat ----------------
 const glaze=new THREE.MeshPhysicalMaterial({color:0xf5efe4,roughness:.16,clearcoat:1,clearcoatRoughness:.22});
-const gold=new THREE.MeshStandardMaterial({color:0xd8b860,roughness:.25,metalness:.85});
+
 const red=new THREE.MeshStandardMaterial({color:0xa01828,roughness:.6});
 const pink=new THREE.MeshStandardMaterial({color:0xe89aa0,roughness:.7});
 const ink=new THREE.MeshStandardMaterial({color:0x241d20,roughness:.4});
