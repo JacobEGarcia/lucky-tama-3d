@@ -132,7 +132,7 @@ a{color:#c9a86a}
     <button class="hb" id="bright">▶</button>
   </div>
 </div>
-<div id="help">◀ ▶ choose · ● confirm · drag Lucky to pet — he lives on while you're away</div><div id="ver">v18</div>
+<div id="help">◀ ▶ choose · ● confirm · drag Lucky to pet — he lives on while you're away</div><div id="ver">v19</div>
 </div>
 <div id="fortune"><div class="card"><div class="seal">吉</div><div class="stick"></div><h2 id="fttl"></h2><div class="jp" id="fjp"></div><p id="ftxt"></p><button id="fok">POCKET IT</button></div></div>
 <div id="share"><div class="card"><div class="seal">札</div><h2>LUCKY CARD</h2><div class="jp">絵馬札</div><canvas id="cardCv" width="900" height="1200"></canvas><input id="cname" maxlength="12" placeholder="your cat's name"><div><button id="cdl">DOWNLOAD</button> <button id="cok">DONE</button></div></div></div>
@@ -392,7 +392,7 @@ const kobanTex=(()=>{const c=document.createElement('canvas');c.width=128;c.heig
   g.font='700 38px serif';
   g.fillText('千',64,44);g.fillText('万',64,82);g.fillText('両',64,120);
   const t=new THREE.CanvasTexture(c);t.colorSpace=THREE.SRGBColorSpace;return t;})();
-const koban=new THREE.Mesh(new THREE.CylinderGeometry(.32,.32,.07,24),new THREE.MeshStandardMaterial({map:kobanTex,metalness:.75,roughness:.3}));
+const koban=new THREE.Mesh(new THREE.CylinderGeometry(.32,.32,.07,24),new THREE.MeshStandardMaterial({map:kobanTex,metalness:.75,roughness:.3,emissive:0xd8b860,emissiveIntensity:.05}));
 koban.rotation.x=Math.PI/2;koban.scale.set(1,1,1.32);koban.position.set(0,0,.52);pawLG.add(koban);
 // tail: 3-segment tucked curve
 const tailG=new THREE.Group();tailG.position.set(-.75,.75,-.55);cat.add(tailG);
@@ -983,6 +983,7 @@ function dayNight(dt){
   amb.intensity+=(ta-amb.intensity)*Math.min(1,dt*2);
   lantern.material.emissiveIntensity+=((night?2.2:0)-lantern.material.emissiveIntensity)*Math.min(1,dt*2);
   lanternLight.intensity+=((night?1.6:0)-lanternLight.intensity)*Math.min(1,dt*2);
+  koban.material.emissiveIntensity+=((night?.55:.05)-koban.material.emissiveIntensity)*Math.min(1,dt*2);
   const bg=night?0x141821:(_amb.rain?0x3a4149:0x2a3140);
   scene.background.lerp(new THREE.Color(bg),Math.min(1,dt*2));
   scene.fog.color.copy(scene.background);
