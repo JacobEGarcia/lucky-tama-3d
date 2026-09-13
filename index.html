@@ -153,7 +153,7 @@ a{color:#c9a86a}
     <button class="hb" id="bright">▶</button>
   </div>
 </div>
-<div id="help">◀ ▶ choose · ● confirm · drag Lucky to pet — he lives on while you're away</div><div id="ver">v31</div><div id="sib"><a href="https://jacobegarcia.github.io/lucky-garden/">庭 garden</a> <span style="opacity:.35">·</span> <a href="https://jacobegarcia.github.io/lucky-cat-tamagotchi/">卵 tama</a></div>
+<div id="help">◀ ▶ choose · ● confirm · drag Lucky to pet — he lives on while you're away</div><div id="ver">v32</div><div id="sib"><a href="https://jacobegarcia.github.io/lucky-garden/">庭 garden</a> <span style="opacity:.35">·</span> <a href="https://jacobegarcia.github.io/lucky-cat-tamagotchi/">卵 tama</a></div>
 </div>
 <div id="fortune"><div class="card"><div class="seal">吉</div><div class="stick"></div><h2 id="fttl"></h2><div class="jp" id="fjp"></div><p id="ftxt"></p><button id="fok">POCKET IT</button></div></div>
 <div id="share"><div class="card"><div class="seal">札</div><h2>LUCKY CARD</h2><div class="jp">絵馬札</div><canvas id="cardCv" width="900" height="1200"></canvas><input id="cname" maxlength="12" placeholder="your cat's name"><div><button id="cdl">DOWNLOAD</button> <button id="cok">DONE</button></div></div></div>
@@ -723,7 +723,8 @@ const LINES={
 // garden reciprocal: if you keep a garden on this origin, Lucky notices
 const _garden=(()=>{try{const g=JSON.parse(localStorage.getItem('lucky-garden-v1')||'null');return g&&Array.isArray(g.seen)?g:null}catch(e){return null}})();
 const GLINES=_garden?['Lucky is content. the paw keeps waving.','Lucky is content. he dreamed of the garden last night.','Lucky is content. '+Math.max(1,_garden.seen.length)+' friends visit the garden now.','Lucky is content. the wind carries garden smells.']:null;
-const CLINES=GLINES?GLINES.concat(_seas.line):[LINES.content,_seas.line];
+const _gardenLuck=(_garden&&_garden.seen.length>=10)||new URLSearchParams(location.search).has('gluck');
+const CLINES=(GLINES?GLINES.concat(_seas.line):[LINES.content,_seas.line]).concat(_gardenLuck?['Lucky is content. the garden sends its luck home.']:[]);
 
 // ---------------- actions ----------------
 let feedT=0,playT=0,petT=0,greetT=0,bathT=0,cd={feed:0,pet:0,clean:0};
@@ -1116,6 +1117,7 @@ function animate(){
   if(S.charm==='en')S.happiness=clamp(S.happiness+dt*100/5400);
   else if(S.charm==='ken')S.energy=clamp(S.energy+dt*100/5400);
   else if(S.charm==='kai')S.luck=clamp(S.luck+dt*100/5400);
+  if(_gardenLuck)S.luck=clamp(S.luck+dt*100/7200);
   drawStats();
   dayNight(dt);ambTick(dt);seasonalTick(dt,t);
   dream.visible=S.sleeping;
