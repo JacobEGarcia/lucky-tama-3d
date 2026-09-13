@@ -153,7 +153,7 @@ a{color:#c9a86a}
     <button class="hb" id="bright">▶</button>
   </div>
 </div>
-<div id="help">◀ ▶ choose · ● confirm · drag Lucky to pet — he lives on while you're away</div><div id="ver">v29</div><div id="sib"><a href="https://jacobegarcia.github.io/lucky-garden/">庭 garden</a> <span style="opacity:.35">·</span> <a href="https://jacobegarcia.github.io/lucky-cat-tamagotchi/">卵 tama</a></div>
+<div id="help">◀ ▶ choose · ● confirm · drag Lucky to pet — he lives on while you're away</div><div id="ver">v30</div><div id="sib"><a href="https://jacobegarcia.github.io/lucky-garden/">庭 garden</a> <span style="opacity:.35">·</span> <a href="https://jacobegarcia.github.io/lucky-cat-tamagotchi/">卵 tama</a></div>
 </div>
 <div id="fortune"><div class="card"><div class="seal">吉</div><div class="stick"></div><h2 id="fttl"></h2><div class="jp" id="fjp"></div><p id="ftxt"></p><button id="fok">POCKET IT</button></div></div>
 <div id="share"><div class="card"><div class="seal">札</div><h2>LUCKY CARD</h2><div class="jp">絵馬札</div><canvas id="cardCv" width="900" height="1200"></canvas><input id="cname" maxlength="12" placeholder="your cat's name"><div><button id="cdl">DOWNLOAD</button> <button id="cok">DONE</button></div></div></div>
@@ -200,7 +200,7 @@ cushion.position.y=.28;scene.add(cushion);
 const trim=new THREE.Mesh(new THREE.TorusGeometry(2.12,.07,10,40),new THREE.MeshStandardMaterial({color:0xd8b860,roughness:.3,metalness:.7}));
 trim.rotation.x=Math.PI/2;trim.position.y=.56;scene.add(trim);
 // koban jar: the shared wallet, resting in the tokonoma corner
-const jarG=new THREE.Group();jarG.position.set(-2.75,0,.55);jarG.scale.setScalar(1.18);scene.add(jarG);
+const jarG=new THREE.Group();jarG.position.set(-2.55,0,.85);jarG.scale.setScalar(1.18);scene.add(jarG);
 const jar=new THREE.Mesh(new THREE.CylinderGeometry(.3,.38,.5,20),new THREE.MeshStandardMaterial({color:0x2e4a5e,roughness:.4}));jar.position.y=.25;jarG.add(jar);
 const jarRim=new THREE.Mesh(new THREE.TorusGeometry(.3,.035,10,24),new THREE.MeshStandardMaterial({color:0x1e3644,roughness:.45}));jarRim.rotation.x=Math.PI/2;jarRim.position.y=.5;jarG.add(jarRim);
 const jarCoins=[];
