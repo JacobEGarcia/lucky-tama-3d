@@ -142,7 +142,7 @@ a{color:#c9a86a}
     <button class="hb" id="bright">▶</button>
   </div>
 </div>
-<div id="help">◀ ▶ choose · ● confirm · drag Lucky to pet — he lives on while you're away</div><div id="ver">v23</div><div id="sib"><a href="https://jacobegarcia.github.io/lucky-garden/">庭 garden</a> <span style="opacity:.35">·</span> <a href="https://jacobegarcia.github.io/lucky-cat-tamagotchi/">卵 tama</a></div>
+<div id="help">◀ ▶ choose · ● confirm · drag Lucky to pet — he lives on while you're away</div><div id="ver">v24</div><div id="sib"><a href="https://jacobegarcia.github.io/lucky-garden/">庭 garden</a> <span style="opacity:.35">·</span> <a href="https://jacobegarcia.github.io/lucky-cat-tamagotchi/">卵 tama</a></div>
 </div>
 <div id="fortune"><div class="card"><div class="seal">吉</div><div class="stick"></div><h2 id="fttl"></h2><div class="jp" id="fjp"></div><p id="ftxt"></p><button id="fok">POCKET IT</button></div></div>
 <div id="share"><div class="card"><div class="seal">札</div><h2>LUCKY CARD</h2><div class="jp">絵馬札</div><canvas id="cardCv" width="900" height="1200"></canvas><input id="cname" maxlength="12" placeholder="your cat's name"><div><button id="cdl">DOWNLOAD</button> <button id="cok">DONE</button></div></div></div>
@@ -495,7 +495,9 @@ const HERO_GLB=null;
 // ---------------- save / state ----------------
 const KEY='lucky-tama-3d-v1';
 const S={hunger:80,happiness:80,energy:80,clean:85,luck:50,coins:0,best:0,streak:0,lastVisitDay:'',stage:0,collar:'aka',cushion:'shu',charm:null,owned:['aka','shu'],darumaDone:false,name:'Lucky',sleeping:false,fortuneDay:'',lastSeen:Date.now(),born:Date.now()};
-function save(){S.lastSeen=Date.now();try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}}
+const WALLET='lucky-koban-v1';
+function save(){S.lastSeen=Date.now();S.walletLast=S.coins|0;try{localStorage.setItem(KEY,JSON.stringify(S));localStorage.setItem(WALLET,String(S.coins|0));}catch(e){}}
+addEventListener('storage',e=>{if(e.key===WALLET&&e.newValue!=null){const v=+e.newValue||0;if(v!==(S.coins|0)){S.coins=v;S.walletLast=v;drawStats();}}});
 function load(){
   try{
     const raw=localStorage.getItem(KEY);
@@ -1107,6 +1109,8 @@ function animate(){
 }
 // ---------------- boot ----------------
 const away=load();
+// shared koban wallet - one purse across the Lucky universe (same-origin localStorage)
+try{const _w=localStorage.getItem(WALLET);if(!S.walletSynced){S.coins=(S.coins|0)+(+_w||0);S.walletSynced=true;S.walletLast=S.coins|0;localStorage.setItem(WALLET,String(S.coins|0));}else if(_w!==null){const wv=+_w||0,delta=Math.max(0,(S.coins|0)-(S.walletLast|0));S.coins=wv+delta;S.walletLast=S.coins|0;localStorage.setItem(WALLET,String(S.coins|0));}}catch(e){}
 applyStage();
 applyLook();
 checkEvolve();
