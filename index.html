@@ -153,7 +153,7 @@ a{color:#c9a86a}
     <button class="hb" id="bright">▶</button>
   </div>
 </div>
-<div id="help">◀ ▶ choose · ● confirm · drag Lucky to pet — he lives on while you're away</div><div id="ver">v26</div><div id="sib"><a href="https://jacobegarcia.github.io/lucky-garden/">庭 garden</a> <span style="opacity:.35">·</span> <a href="https://jacobegarcia.github.io/lucky-cat-tamagotchi/">卵 tama</a></div>
+<div id="help">◀ ▶ choose · ● confirm · drag Lucky to pet — he lives on while you're away</div><div id="ver">v27</div><div id="sib"><a href="https://jacobegarcia.github.io/lucky-garden/">庭 garden</a> <span style="opacity:.35">·</span> <a href="https://jacobegarcia.github.io/lucky-cat-tamagotchi/">卵 tama</a></div>
 </div>
 <div id="fortune"><div class="card"><div class="seal">吉</div><div class="stick"></div><h2 id="fttl"></h2><div class="jp" id="fjp"></div><p id="ftxt"></p><button id="fok">POCKET IT</button></div></div>
 <div id="share"><div class="card"><div class="seal">札</div><h2>LUCKY CARD</h2><div class="jp">絵馬札</div><canvas id="cardCv" width="900" height="1200"></canvas><input id="cname" maxlength="12" placeholder="your cat's name"><div><button id="cdl">DOWNLOAD</button> <button id="cok">DONE</button></div></div></div>
@@ -646,6 +646,17 @@ rend.domElement.addEventListener('pointermove',e=>{
 window.addEventListener('pointerup',()=>{_dragPet=false;});
 window.addEventListener('keydown',()=>{_unlocked=true;});
 const _amb={rain:false,rainRoll:Date.now()+45000};
+function chimeTinkle(){
+  if(!_unlocked)return;const ac=audio();if(ac.state==='suspended')return;
+  const t0=ac.currentTime;
+  [1880,2530,3160].forEach((f,i)=>{
+    const o=ac.createOscillator(),g=ac.createGain();
+    o.type='sine';o.frequency.value=f*(1+Math.random()*.012);
+    g.gain.setValueAtTime(0,t0);g.gain.linearRampToValueAtTime(.045/(i+1),t0+.012);
+    g.gain.exponentialRampToValueAtTime(.0001,t0+2+Math.random()*1.2);
+    o.connect(g);g.connect(ac.destination);o.start(t0);o.stop(t0+3.4);
+  });
+}
 const _buf={},_gain={},_cur={};
 function ambStart(n){
   if(_gain[n]||_buf[n+'_loading'])return;
@@ -666,6 +677,7 @@ function ambTick(dt){
     const r=Math.random()<.18;
     if(r!==_amb.rain){_amb.rain=r;flashStatus(r?'Rain outside - Lucky watches the drops.':'The rain cleared.');}
   }
+  if(GLINES){_amb.chimeT=_amb.chimeT||now+20000+Math.random()*25000;if(now>_amb.chimeT){_amb.chimeT=now+45000+Math.random()*75000;chimeTinkle();}}
   const h=(new URLSearchParams(location.search).has('h')?+new URLSearchParams(location.search).get('h'):new Date().getHours());
   const bed=_amb.rain?'room_rain':((h<6||h>=19)?'room_night':'room_day');
   for(const n of ['room_day','room_night','room_rain']){
