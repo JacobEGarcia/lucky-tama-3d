@@ -132,7 +132,7 @@ a{color:#c9a86a}
     <button class="hb" id="bright">▶</button>
   </div>
 </div>
-<div id="help">◀ ▶ choose · ● confirm · drag Lucky to pet — he lives on while you're away</div><div id="ver">v20</div>
+<div id="help">◀ ▶ choose · ● confirm · drag Lucky to pet — he lives on while you're away</div><div id="ver">v21</div>
 </div>
 <div id="fortune"><div class="card"><div class="seal">吉</div><div class="stick"></div><h2 id="fttl"></h2><div class="jp" id="fjp"></div><p id="ftxt"></p><button id="fok">POCKET IT</button></div></div>
 <div id="share"><div class="card"><div class="seal">札</div><h2>LUCKY CARD</h2><div class="jp">絵馬札</div><canvas id="cardCv" width="900" height="1200"></canvas><input id="cname" maxlength="12" placeholder="your cat's name"><div><button id="cdl">DOWNLOAD</button> <button id="cok">DONE</button></div></div></div>
@@ -164,6 +164,14 @@ floor.position.y=-.1;scene.add(floor);
 const lantern=new THREE.Mesh(new THREE.SphereGeometry(.5,14,12),new THREE.MeshStandardMaterial({color:0xffd9a0,emissive:0xff9d3a,emissiveIntensity:0,roughness:.6}));
 lantern.position.set(-2.1,3.2,-1.8);scene.add(lantern);
 const lanternLight=new THREE.PointLight(0xff9d3a,0,10);lanternLight.position.copy(lantern.position);scene.add(lanternLight);
+// andon floor lamp - second warm source so the right side never goes void at night
+const andon=new THREE.Group();
+const andonPaper=new THREE.Mesh(new THREE.BoxGeometry(.42,.6,.42),new THREE.MeshStandardMaterial({color:0xf5e8cf,roughness:.8,emissive:0xffb35c,emissiveIntensity:0}));andonPaper.position.y=.55;andon.add(andonPaper);
+const andonFrame=new THREE.MeshStandardMaterial({color:0x2e2018,roughness:.85});
+const andonBase=new THREE.Mesh(new THREE.BoxGeometry(.5,.06,.5),andonFrame);andonBase.position.y=.22;andon.add(andonBase);
+const andonTop=new THREE.Mesh(new THREE.BoxGeometry(.5,.05,.5),andonFrame);andonTop.position.y=.88;andon.add(andonTop);
+andon.position.set(2.35,0,-2.0);andon.rotation.y=-.3;scene.add(andon);
+const andonLight=new THREE.PointLight(0xffb35c,0,7,2);andonLight.position.set(2.35,.75,-2.0);scene.add(andonLight);
 // cushion
 const cushionMat=new THREE.MeshStandardMaterial({color:0xa01828,roughness:.75});
 const cushion=new THREE.Mesh(new THREE.CylinderGeometry(2.1,2.3,.55,28),cushionMat);
@@ -983,6 +991,8 @@ function dayNight(dt){
   amb.intensity+=(ta-amb.intensity)*Math.min(1,dt*2);
   lantern.material.emissiveIntensity+=((night?2.2:0)-lantern.material.emissiveIntensity)*Math.min(1,dt*2);
   lanternLight.intensity+=((night?1.6:0)-lanternLight.intensity)*Math.min(1,dt*2);
+  andonPaper.material.emissiveIntensity+=((night?1.4:0)-andonPaper.material.emissiveIntensity)*Math.min(1,dt*2);
+  andonLight.intensity+=((night?1.1:0)-andonLight.intensity)*Math.min(1,dt*2);
   koban.material.emissiveIntensity+=((night?.55:.05)-koban.material.emissiveIntensity)*Math.min(1,dt*2);
   const bg=night?0x141821:(_amb.rain?0x3a4149:0x2a3140);
   scene.background.lerp(new THREE.Color(bg),Math.min(1,dt*2));
